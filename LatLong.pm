@@ -1,5 +1,8 @@
 package Geography::Countries::LatLong;
 
+use vars '$VERSION';
+$VERSION	 = 0.9;
+
 =head1 NAME
 
 Geography::Countries::LatLong - Perl extension for blah blah blah
@@ -8,7 +11,7 @@ Geography::Countries::LatLong - Perl extension for blah blah blah
 
   use Geography::Countries::LatLong;
   my $array_ref   = latlong('Hungary');
-  my ($lat,$long) = latlong('Hungary');
+  my ($lat,$long) = latlong('EU');
 
 =head1 DESCRIPTION
 
@@ -32,11 +35,16 @@ where C<name> is a country name recognised by MATLAB:
 	  fprintf( '"%s" => ["%.4f","%.4f"],', name,lat,lon);
 	% end function country_latlon
 
-You will need the Mapping Toolbox to run the above snippet.
+(You will need the Mapping Toolbox to run the above snippet.)
+
+B<Note> that some of the values have been adjusted from the mean for
+clearer visual presentation: for example, the mean average of the
+values for the United States of America plot a point in the Pacific
+Ocean, since including Alaska in the calculations upsets things.
 
 =head2 EXPORT
 
-	countries
+	country
 	latlong
 	latlong_aspair
 
@@ -45,11 +53,10 @@ You will need the Mapping Toolbox to run the above snippet.
 use strict;
 use base 'Geography::Countries';
 use vars qw/@countries $countries %EXPORT_TAGS @EXPORT_OK/;
-use vars qw /@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION $countries_latlong/;
+use vars qw /@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $countries_latlong/;
 
 @ISA         = qw /Exporter/;
 @EXPORT      = qw /country latlong latlong_aspair/;
-$VERSION	 = 0.1;
 
 #
 # Arrays of latitude and longitude
@@ -316,8 +323,8 @@ $countries_latlong = {
 	"United Kingdom" => ["55.40342","-3.21145"],
 	"United Republic of Tanzania" => ["-6.36822","34.88519"],
 	"United States Virgin Islands" => ["18.0699","-64.8257"],
-	"United States of America" => ["45.15217","-127.25006"],
-	"United States" => ["45.15217","-127.25006"],
+	"United States of America" => ["38.15217","-100.25006"], # ["45.15217","-127.25006"],
+	"United States" => ["38.15217","-100.25006"],
 	"Uruguay" => ["-32.53152","-55.75833"],
 	"Uzbekistan" => ["41.37967","64.56445"],
 	"Vanuatu" => ["-16.66119","168.21488"],
@@ -334,6 +341,10 @@ $countries_latlong = {
 	"Zimbabwe" => ["-19.01329","29.14667"],
  	"Guatemala" => ["15.7763","-90.2323"],
  	"Niue" => ["-19.0516","-169.8631"],
+
+	"Yugoslavia" => ["44.0660","20.9225"], # serbia
+	"European Union" => ["51","4.5"],	# Near Brussels
+	"EU" => ["51","4.5"],	# European Union
 };
 
 =head2 unsupported ($country_name)
@@ -460,7 +471,11 @@ __END__
 	Western Africa
 	Western Asia
 	Western Europe
-	Yugoslavia
+
+=head1 DUBIOUSLY SUPPORTED COUNTRY NAMES
+
+	Yugoslavia (inaccurately equates to Serbia, here)
+	European Union (or EU, somewhere near Brussels)
 
 =head1 AUTHOR
 
