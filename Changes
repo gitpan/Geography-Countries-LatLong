@@ -1,0 +1,6 @@
+Revision history for Perl extension Geography::Countries::LatLong.
+
+0.01  Fri Feb 21 20:09:01 2003
+	- original version; created by h2xs 1.21 with options
+		-X -n Geography::Countries::LatLong
+
