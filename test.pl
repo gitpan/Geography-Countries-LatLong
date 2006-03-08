@@ -1,29 +1,17 @@
-# Version 0.9
+use Test::More tests => 6;
 
-print "1..5\n";
-
-use Geography::Countries::LatLong;
-print "ok 1\n";
-if ($Geography::Countries::LatLong::VERSION==0.9){
-	print "ok 2\n";
-} else {
-	print "not ok 2\n";
+BEGIN {
+	use_ok( "Geography::Countries::LatLong" => 0.91 )
 }
 
-if (ref latlong("Niue") eq 'ARRAY'){
-	print "ok 3\n";
-} else {
-	print "not ok 3\n";
-}
+isa_ok( latlong("Niue"),'ARRAY', 'return');
 @_ = latlong_aspair('Niue');
-if ($_[0] eq '-19.0516' and $_[1] eq '-169.8631'){
-	print "ok 4\n";
-} else {
-	print "not ok 4\n";
-}
-if (not latlong_aspair('Bum')){
-	print "ok 5\n";
-} else {
-	print "not ok 5\n";
-}
 
+is($_[0], '-19.0516', 'lat');
+is($_[1], '-169.8631', 'lon');
+
+is(latlong_aspair('Hyperion'), undef, 'bad country');
+
+isnt(Geography::Countries::LatLong::supports('Hungary'),undef,'supports');
+
+exit;

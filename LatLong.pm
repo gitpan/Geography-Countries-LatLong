@@ -1,31 +1,30 @@
 package Geography::Countries::LatLong;
 
-use vars '$VERSION';
-$VERSION	 = 0.9;
-
 =head1 NAME
 
-Geography::Countries::LatLong - Perl extension for blah blah blah
+Geography::Countries::LatLong - mean latitude and longitude
 
 =head1 SYNOPSIS
 
-  use Geography::Countries::LatLong;
-  my $array_ref   = latlong('Hungary');
-  my ($lat,$long) = latlong('EU');
+	use Geography::Countries::LatLong;
+	if ( Geography::Countries::LatLong::supports('Hungary') ){
+		my $array_ref    = latlong('Hungary');
+		my ($lat, $long) = latlong_aspair('Hungary');
+	}
 
 =head1 DESCRIPTION
 
 This module provides mean latitude and longitude for a large number
-of countries extant at the time of going to press.
+of countries named in English.
 
 Regions and continents are not supported - please see the list below.
 
-Look-up is by country name, as returned by the C<Geography::Countries>
+Look-up is by the English name of the country, as returned by the C<Geography::Countries>
 module, of which this is a sub-class that exports none of its parent's
 properties or methods.
 
-The mean values were arrived at with the following MATLAB code,
-where C<name> is a country name recognised by MATLAB:
+The mean values were arrived at with the following I<MATLAB> code,
+where C<name> is a country name recognised by I<MATLAB>:
 
 	function [lat,lon] = country_latlon(name);
 	  load worldmtx;
@@ -35,16 +34,11 @@ where C<name> is a country name recognised by MATLAB:
 	  fprintf( '"%s" => ["%.4f","%.4f"],', name,lat,lon);
 	% end function country_latlon
 
-(You will need the Mapping Toolbox to run the above snippet.)
-
-B<Note> that some of the values have been adjusted from the mean for
-clearer visual presentation: for example, the mean average of the
-values for the United States of America plot a point in the Pacific
-Ocean, since including Alaska in the calculations upsets things.
+You will need the Mapping Toolbox to run the above snippet.
 
 =head2 EXPORT
 
-	country
+	countries
 	latlong
 	latlong_aspair
 
@@ -53,10 +47,12 @@ Ocean, since including Alaska in the calculations upsets things.
 use strict;
 use base 'Geography::Countries';
 use vars qw/@countries $countries %EXPORT_TAGS @EXPORT_OK/;
-use vars qw /@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $countries_latlong/;
+use vars qw /@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION $countries_latlong/;
 
-@ISA         = qw /Exporter/;
-@EXPORT      = qw /country latlong latlong_aspair/;
+@ISA          = qw /Exporter/;
+@EXPORT       = qw /country latlong latlong_aspair/;
+@EXPORT_OK    = qw /countries_latlong/;
+$VERSION	  = '0.91';
 
 #
 # Arrays of latitude and longitude
@@ -321,10 +317,15 @@ $countries_latlong = {
 	"Ukraine" => ["48.37989","31.16814"],
 	"United Arab Emirates" => ["24.28796","53.74409"],
 	"United Kingdom" => ["55.40342","-3.21145"],
+	"UK" => ["55.40342","-3.21145"],
+	"Britain" => ["55.40342","-3.21145"],
+	"Great Britain" => ["55.40342","-3.21145"],
 	"United Republic of Tanzania" => ["-6.36822","34.88519"],
 	"United States Virgin Islands" => ["18.0699","-64.8257"],
 	"United States of America" => ["38.15217","-100.25006"], # ["45.15217","-127.25006"],
 	"United States" => ["38.15217","-100.25006"],
+	"America" => ["38.15217","-100.25006"],
+	"USA" => ["38.15217","-100.25006"],
 	"Uruguay" => ["-32.53152","-55.75833"],
 	"Uzbekistan" => ["41.37967","64.56445"],
 	"Vanuatu" => ["-16.66119","168.21488"],
@@ -345,25 +346,28 @@ $countries_latlong = {
 	"Yugoslavia" => ["44.0660","20.9225"], # serbia
 	"European Union" => ["51","4.5"],	# Near Brussels
 	"EU" => ["51","4.5"],	# European Union
+	"EEC" => ["51","4.5"],	# European Union
 };
 
-=head2 unsupported ($country_name)
+=head2 latlong ($country_name)
 
 Returns as a 1x2 anonymous array the latitude and longitude
-for the country supplied as the sole argument.
+for the country supplied as the sole argument, or C<undef> if
+the country is not supported.
 
 =cut
 
 sub latlong {
 	my $country = shift;
 	return undef if not $country;
-	return exists $countries_latlong->{$country}? $countries_latlong->{$country}:undef;
+	return exists $countries_latlong->{$country}? $countries_latlong->{$country} : undef;
 }
 
-=head2 unsupported ($country_name)
+=head2 latlong_aspair ($country_name)
 
 Returns as two strings the latitude and longitude
-for the country supplied as the sole argument.
+for the country supplied as the sole argument, or C<undef> if
+the country is not supported.
 
 =cut
 
@@ -379,9 +383,22 @@ sub latlong_aspair {
 	return ($lat,$long);
 }
 
+=head2 supports ($country)
+
+Returns a true value if the sole argument is a country name supported by this module;
+otherwise, returns C<undef>.
+
+=cut
+
+sub supports {
+	my $country = shift;
+	return undef unless $country;
+	return exists $countries_latlong->{$country};
+}
+
 =head2 unsupported
 
-Prints to C<STDERR> a list of C<Geography::Countries::countries>
+C<warn>s to C<STDERR> a list of C<Geography::Countries::countries>
 that are not supported by this module.
 
 =cut
@@ -395,9 +412,10 @@ sub unsupported {
 	}
 }
 
+
 =head2 country
 
-Just Geography::Countries's routine.
+Just C<Geography::Countries>'s routine.
 
 =cut
 
@@ -412,7 +430,9 @@ __END__
 
 
 
-=head1 UNSUPPORTED COUNTRY NAMES
+=head1 UNSUPPORTED NAMES
+
+It is no reflection on the countries listed: I just don't have the data at the time of writing.
 
 	Africa
 	Americas
@@ -471,11 +491,7 @@ __END__
 	Western Africa
 	Western Asia
 	Western Europe
-
-=head1 DUBIOUSLY SUPPORTED COUNTRY NAMES
-
-	Yugoslavia (inaccurately equates to Serbia, here)
-	European Union (or EU, somewhere near Brussels)
+	Yugoslavia
 
 =head1 AUTHOR
 
@@ -487,6 +503,5 @@ L<perl>, L<Geography::Countries>.
 
 =head1 COPYRIGHT
 
-Copyright (C) Lee Goddard, 2003. All Rights Reserved.
-Made publically available under the same terms
-as Perl itself.
+Copyright (C) Lee Goddard, 2003, 2006. All Rights Reserved.
+Made publically available under the same terms as Perl itself.

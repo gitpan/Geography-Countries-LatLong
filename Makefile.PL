@@ -5,9 +5,10 @@ WriteMakefile(
     'NAME'		=> 'Geography::Countries::LatLong',
     'VERSION_FROM'	=> 'LatLong.pm', # finds $VERSION
     'PREREQ_PM'		=> {
-		Geography::Countries => 0.1,
+		'Geography::Countries'	=> 0.1,
+		'Test::More'			=> 0.1,
 	}, # e.g., Module::Name => 1.1
     ($] >= 5.005 ?    ## Add these new keywords supported since 5.005
       (ABSTRACT_FROM => 'LatLong.pm', # retrieve abstract from module
-       AUTHOR     => 'Lee Goddard <lgoddard@cpan.org>') : ()),
+       AUTHOR     => 'Lee Goddard <lgoddard -at- cpan -dot- org>') : ()),
 );
