@@ -1,7 +1,7 @@
 Changes
-LatLong.pm
 Makefile.PL
 MANIFEST
 README
-test.pl
+t/Geography-Countries-LatLong.t
+lib/Geography/Countries/LatLong.pm
 META.yml                                 Module meta-data (added by MakeMaker)

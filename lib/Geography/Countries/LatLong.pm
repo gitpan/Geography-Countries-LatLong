@@ -9,7 +9,7 @@ Geography::Countries::LatLong - mean latitude and longitude
 	use Geography::Countries::LatLong;
 	if ( Geography::Countries::LatLong::supports('Hungary') ){
 		my $array_ref    = latlong('Hungary');
-		my ($lat, $long) = latlong_aspair('Hungary');
+		my ($lat, $long) = latlongr('Hungary');
 	}
 
 =head1 DESCRIPTION
@@ -36,11 +36,18 @@ where C<name> is a country name recognised by I<MATLAB>:
 
 You will need the Mapping Toolbox to run the above snippet.
 
+DEPENDENCIES
+
+This module requires these other modules and libraries:
+
+  Geography::Countries
+
 =head2 EXPORT
+
+This module exports the following subroutines:
 
 	countries
 	latlong
-	latlong_aspair
 
 =cut
 
@@ -50,9 +57,9 @@ use vars qw/@countries $countries %EXPORT_TAGS @EXPORT_OK/;
 use vars qw /@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION $countries_latlong/;
 
 @ISA          = qw /Exporter/;
-@EXPORT       = qw /country latlong latlong_aspair/;
+@EXPORT       = qw /country latlong /;
 @EXPORT_OK    = qw /countries_latlong/;
-$VERSION	  = '0.91';
+$VERSION	  = '0.92';
 
 #
 # Arrays of latitude and longitude
@@ -112,11 +119,15 @@ $countries_latlong = {
 	"China" => ["35.86107","104.16581"],
 	"Christmas Island" => ["-10.4958","105.6293"],
 	"Cocos (Keeling) Islands" => ["-11.9947","96.8787"],
-	"Cocos (keeling) Islands" => ["-11.9947","96.8787"],
+	"Cocos Islands" => ["-11.9947","96.8787"],
+	"Keeling Islands" => ["-11.9947","96.8787"],
 	"Colombia" => ["4.57748","-74.29897"],
 	"Comoros" => ["-11.88810","43.87701"],
+	'Federal Islamic Republic of the Comoros' => ["-11.88810","43.87701"],
+	'Comoros, Federal Islamic Republic of the' => ["-11.88810","43.87701"],
 	"Congo" => ["-0.66207","14.92742"],
 	"Congo, Republic of the" => ["-0.66207","14.92742"],
+	"Republic of the Congo" => ["-0.66207","14.92742"],
 	"Cook Islands" => ["-15.4441","-161.5851"],
 	"Costa Rica" => ["9.62490","-84.25331"],
 	"Croatia" => ["44.48731","16.46031"],
@@ -126,6 +137,7 @@ $countries_latlong = {
 	"Democratic People's Republic of Korea" => ["40.3017","127.4318"],
 	"Democratic Peoples Republic of Korea" => ["40.3017","127.4318"],
 	"Democratic Republic of the Congo" => ["-4.03479","21.75503"],
+	"Congo, Democratic Republic of the" => ["-4.03479","21.75503"],
 	"Democratic Yemen" => ["15.35796","48.17329"],
 	"Denmark" => ["56.15540","11.61722"],
 	"Djibouti" => ["11.80837","42.59521"],
@@ -139,8 +151,6 @@ $countries_latlong = {
 	"Eritrea" => ["15.18132","39.79370"],
 	"Estonia" => ["58.59620","25.02378"],
 	"Ethiopia" => ["9.14809","40.49306"],
-	"Falkland Islands (Islas Malvinas)" => ["-51.9578","-59.5288"],
-	"Falkland Islands (Malvinas)" => ["-51.9578","-59.5288"],
 	"Falkland Islands" => ["-51.9578","-59.5288"],
 	"Faroc Islands" => ["-23.6308","-148.5444"],
 	"Faroe Islands" => ["61.8978","-6.8707"],
@@ -165,7 +175,9 @@ $countries_latlong = {
 	"Guadeloupe" => ["16.17391","-61.40358"],
 	"Guam" => ["13.4465","144.7866"],
 	"Guatamala" => ["15.7763","-90.2323"],
+	'Republic of Guinea' => ["9.93489","-11.28384"],
 	"Guinea, Republic of" => ["9.93489","-11.28384"],
+	"Republic of Guinea" => ["9.93489","-11.28384"],
 	"Guinea-Bissau" => ["11.77038","-15.17703"],
 	"Guyana" => ["4.86632","-58.93251"],
 	"Haiti" => ["19.05443","-73.04597"],
@@ -174,16 +186,19 @@ $countries_latlong = {
 	"Hong Kong Special Administrative Region of China" => ["22.3565","114.1363"],
 	"Hong Kong" => ["22.3565","114.1363"],
 	"Hungary" => ["47.16463","19.50894"],
+	"Hungary, Republic of" => ["47.16463","19.50894"],
 	"Iceland" => ["64.96394","-19.02117"],
 	"India" => ["21.12568","82.78307"],
 	"Indonesia" => ["-2.55022","118.01557"],
 	"Iran (Islamic Republic of)" => ["32.42065","53.68236"],
+	"Iran, Islamic Republic of" => ["32.42065","53.68236"],
 	"Iran" => ["32.42065","53.68236"],
 	"Iraq" => ["33.21634","43.68589"],
 	"Ireland" => ["53.41974","-8.24047"],
 	"Israel" => ["31.38941","34.96023"],
 	"Italy" => ["41.29370","12.56418"],
 	"Ivory Coast" => ["7.5469","-5.5471"],
+	"Côte d'Ivoire" => ["7.5469","-5.5471"],
 	"Jamaica" => ["18.11526","-77.27348"],
 	"Japan" => ["34.77980","138.46188"],
 	"Jordan" => ["31.27678","37.13059"],
@@ -192,7 +207,9 @@ $countries_latlong = {
 	"Kermadec Islands" => ["-29.8863","-178.2544"],
 	"Kiribati" => ["-3.38270","9.62645"],
 	"Korea, Democratic Peoples Republic of" => ["40.3017","127.4318"],
+	"Democratic Peoples Republic of Korea" => ["40.3017","127.4318"],
 	"Korea, Republic of" => ["36.0575","127.3356"],
+	"Republic of Korea" => ["36.0575","127.3356"],
 	"Kuwait" => ["29.31028","47.49351"],
 	"Kyrgyzstan" => ["41.20554","74.77990"],
 	"Lao People's Democratic Republic" => ["18.20521","103.89504"],
@@ -207,6 +224,7 @@ $countries_latlong = {
 	"Lithuania" => ["55.17410","23.96007"],
 	"Luxembourg" => ["49.81576","6.13151"],
 	"Macau" => ["22.1665","113.5600"],
+	"The Former Yugoslav Republic of Macedonia" => ["41.61100","21.75141"],
 	"Macedonia, The Former Yugoslav Republic of" => ["41.61100","21.75141"],
 	"Madagascar" => ["-18.77719","46.83758"],
 	"Madeira Islands" => ["32.7495","-16.7756"],
@@ -223,6 +241,7 @@ $countries_latlong = {
 	"Mexico" => ["23.62481","-102.59446"],
 	"Micronesia" => ["8.4674","150.5438"],
 	"Micronesia, Federated States" => ["8.4674","150.5438"],
+	"Federated States of Micronesia" => ["8.4674","150.5438"],
 	"Midway Island" => ["28.3225","-177.8170"],
 	"Moldova" => ["46.97954","28.37717"],
 	"Monaco" => ["43.75075","7.42401"],
@@ -235,12 +254,14 @@ $countries_latlong = {
 	"Nepal" => ["28.39505","84.12780"],
 	"Netherlands Antilles" => ["15.01941","-66.05044"],
 	"Netherlands" => ["52.11200","5.29500"],
+	"Holland" => ["52.11200","5.29500"],
 	"Netherlands, Antilles" => ["15.01941","-66.05044"],
 	"Netherlands, Kingdom of the" => ["52.11200","5.29500"],
 	"New Caledonia" => ["-21.1322","166.2593"],
 	"New Zealand" => ["-40.71078","172.48664"],
 	"Nicaragua" => ["12.86673","-85.21430"],
 	"Niger, Republic of" => ["17.61100","8.08095"],
+	"Republic of Niger" => ["17.61100","8.08095"],
 	"Nigeria" => ["9.08458","8.67425"],
 	"Norfolk Island" => ["-29.0559","167.9582"],
 	"North Korea" => ["40.3017","127.4318"],
@@ -318,8 +339,10 @@ $countries_latlong = {
 	"United Arab Emirates" => ["24.28796","53.74409"],
 	"United Kingdom" => ["55.40342","-3.21145"],
 	"UK" => ["55.40342","-3.21145"],
+	"GB" => ["55.40342","-3.21145"],
 	"Britain" => ["55.40342","-3.21145"],
 	"Great Britain" => ["55.40342","-3.21145"],
+	"United Kingdom of Great Britain and Northern Island" => ["55.40342","-3.21145"],
 	"United Republic of Tanzania" => ["-6.36822","34.88519"],
 	"United States Virgin Islands" => ["18.0699","-64.8257"],
 	"United States of America" => ["38.15217","-100.25006"], # ["45.15217","-127.25006"],
@@ -336,6 +359,7 @@ $countries_latlong = {
 	"Virgin Islands, U.S." => ["18.0699","-64.8257"],
 	"Western Sahara" => ["24.2219","-12.8867"],
 	"Western Samoa" => ["-13.74787","-172.10396"],
+	"Independent State of Samoa" => ["-13.74787","-172.10396"],
 	"Yemen" => ["15.35796","48.17329"],
 	"Zaire" => ["-4.03479","21.75503"],
 	"Zambia" => ["-13.15192","27.85254"],
@@ -357,31 +381,13 @@ the country is not supported.
 
 =cut
 
-sub latlong {
+sub latlong ($) {
 	my $country = shift;
 	return undef if not $country;
-	return exists $countries_latlong->{$country}? $countries_latlong->{$country} : undef;
+	return undef if not exists $countries_latlong->{$country};
+	return wantarray? @{$countries_latlong->{$country}} : $countries_latlong->{$country};
 }
 
-=head2 latlong_aspair ($country_name)
-
-Returns as two strings the latitude and longitude
-for the country supplied as the sole argument, or C<undef> if
-the country is not supported.
-
-=cut
-
-sub latlong_aspair {
-	my $country = shift || return undef;
-	my ($lat,$long);
-	if (exists $countries_latlong->{$country}
-	and ref $countries_latlong->{$country} eq 'ARRAY'){
-		($lat,$long) = @{$countries_latlong->{$country}};
-	} else {
-		($lat,$long) = (undef,undef);
-	}
-	return ($lat,$long);
-}
 
 =head2 supports ($country)
 
@@ -390,7 +396,7 @@ otherwise, returns C<undef>.
 
 =cut
 
-sub supports {
+sub supports ($) {
 	my $country = shift;
 	return undef unless $country;
 	return exists $countries_latlong->{$country};
@@ -434,64 +440,21 @@ __END__
 
 It is no reflection on the countries listed: I just don't have the data at the time of writing.
 
-	Africa
-	Americas
-	Areas not elsewhere specified
-	Areas not specified
-	Asia
-	Australia and New Zealand
-	Brunei Darussalam
-	Caribbean
-	Central America
-	Channel Islands
-	Czechoslovakia
-	Côte d'Ivoire
+
 	Democratic Kampuchea
-	Eastern Africa
-	Eastern Asia
-	Eastern Europe
-	Europe
 	Faeroe Islands
 	French Guiana
 	French Southern Territories
-	German Democratic Republic
-	Guinea
 	Holy See
-	Isle of Man
-	Latin America and the Caribbean
-	Mayotte
 	Melanesia
-	Micronesia, Federated States of
 	Micronesia-Polynesia
-	Middle Africa
 	Myanmar
-	Niger
-	Northern Africa
-	Northern America
-	Northern Europe
-	Occupied Palestinian Territory
-	Oceania
 	Pacific Islands (Trust Territory)
-	Polynesia
-	Réunion
-	Samoa
-	Socialist Federal Republic of Yugoslavia
-	South America
-	South-central Asia
-	South-eastern Asia
-	Southern Africa
-	Southern Europe
 	Svalbard and Jan Mayen Islands
 	Tokelau
 	Turks and Caicos Islands
-	Union of Soviet Socialist Republics
-	United States Minor Outlying Islands
 	Upper Volta
 	Wallis and Futuna Islands
-	Western Africa
-	Western Asia
-	Western Europe
-	Yugoslavia
 
 =head1 AUTHOR
 

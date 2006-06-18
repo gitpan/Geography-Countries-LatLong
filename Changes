@@ -1,6 +1,11 @@
 Revision history for Perl extension Geography::Countries::LatLong.
 
-0.02  Wed Mar 08 11:34:00 2006
+0.93  Sun Jun 18 17:00:00 2006
+	- updated POD
+	- added &supports and @$latlong
+	- removed _pairs and made latlong check wantarray
+	
+0.91  Wed Mar 08 11:34:00 2006
 	- updated POD
 	- added &supports
 	
