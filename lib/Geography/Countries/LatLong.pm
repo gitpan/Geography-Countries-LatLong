@@ -59,7 +59,7 @@ use vars qw /@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $VERSION $countries_latlong/;
 @ISA          = qw /Exporter/;
 @EXPORT       = qw /country latlong /;
 @EXPORT_OK    = qw /countries_latlong/;
-$VERSION	  = '0.92';
+$VERSION	  = '0.921';
 
 #
 # Arrays of latitude and longitude
