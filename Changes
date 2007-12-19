@@ -1,5 +1,11 @@
 Revision history for Perl extension Geography::Countries::LatLong.
 
+1.0   2007-12-19 11:23
+	- New, more accurate data
+	- More pseduo-aliases 
+	- Augmented erogenous "Northern Island" in old data 
+	  with correct "Northern Ireland"
+
 0.922 Sun August 27 21:55:00 2006
 	- updated countries list
 
